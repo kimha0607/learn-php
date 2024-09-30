@@ -1,6 +1,7 @@
-<?php 
+<?php
 
-class User{
+class User
+{
   private $table_name;
   private $conn;
 
@@ -9,60 +10,67 @@ class User{
   private $phone_number;
   private $username;
 
-  function __construct($db_conn){
+  function __construct($db_conn)
+  {
     $this->conn = $db_conn;
     $this->table_name = "Users";
   }
-  function init($user_id){
+  function init($user_id)
+  {
     try {
-      $sql = 'SELECT * FROM '. $this->table_name.' WHERE user_id=?';
+      $sql = 'SELECT * FROM ' . $this->table_name . ' WHERE user_id=?';
       $stmt = $this->conn->prepare($sql);
       $res = $stmt->execute([$user_id]);
-      if($stmt->rowCount() == 1) {
+      if ($stmt->rowCount() == 1) {
         $user = $stmt->fetch();
-        $this->username =  $user['username'];
-        $this->user_id =  $user['user_id'];
-        $this->phone_number =  $user['phone_number'];
-        $this->user_full_name =  $user['full_name'];
-        $this->user_address =  $user['user_address'];
+        $this->username = $user['username'];
+        $this->user_id = $user['user_id'];
+        $this->phone_number = $user['phone_number'];
+        $this->user_full_name = $user['full_name'];
+        $this->user_address = $user['user_address'];
         return 1;
-      }
-      else return 0;
-    }catch(PDOException $e) {
+      } else
+        return 0;
+    } catch (PDOException $e) {
       return 0;
     }
   }
-  function insert($data){
+
+  function insert($data)
+  {
     try {
-      $sql = 'INSERT INTO '. $this->table_name.'(username, password, full_name, phone_number, user_address) VALUES(?,?,?,?,?)';
+      $sql = 'INSERT INTO ' . $this->table_name . '(username, password, full_name, email, phone_number, user_address) VALUES(?,?,?,?,?, ?)';
       $stmt = $this->conn->prepare($sql);
       $res = $stmt->execute($data);
       return $res;
-    }catch(PDOException $e){
+    } catch (PDOException $e) {
       echo "Error: " . $e->getMessage();
       return 0;
     }
   }
-  function is_username_unique($username){
+  function is_username_unique($username)
+  {
     try {
-      $sql = 'SELECT username FROM '. $this->table_name.' WHERE username=?';
+      $sql = 'SELECT username FROM ' . $this->table_name . ' WHERE username=?';
       $stmt = $this->conn->prepare($sql);
       $res = $stmt->execute([$username]);
-      if($stmt->rowCount() > 0) 
+      if ($stmt->rowCount() > 0)
         return 0;
-      else return 1;
-    }catch(PDOException $e){
+      else
+        return 1;
+    } catch (PDOException $e) {
       return 0;
     }
   }
 
-  function auth($username, $password){
+  function auth($username, $password)
+  {
     try {
-      $sql = 'SELECT * FROM '. $this->table_name.' WHERE username=?';
+      $sql = 'SELECT * FROM ' . $this->table_name . ' WHERE username=?';
       $stmt = $this->conn->prepare($sql);
       $res = $stmt->execute([$username]);
 
-      if($stmt->rowCount() == 1) {
+      if ($stmt->rowCount() == 1) {
         $user = $stmt->fetch();
         $db_username = $user["username"];
         $db_password = $user["password"];
@@ -70,26 +78,32 @@ class User{
         $db_phone_number = $user["phone_number"];
         $db_full_name = $user["full_name"];
 
-        if($db_username === $username ){
+        if ($db_username === $username) {
           if (password_verify($password, $db_password)) {
-            $this->username =  $db_username;
-            $this->user_id =  $db_user_id;
-            $this->phone_number =  $db_phone_number;
-            $this->user_full_name =  $db_user_full_name;
+            $this->username = $db_username;
+            $this->user_id = $db_user_id;
+            $this->phone_number = $db_phone_number;
+            $this->user_full_name = $db_full_name;
             return 1;
-          }else return 0;
-        }else return 0;
-      }else return 0;
-    }catch(PDOException $e){
+          } else
+            return 0;
+        } else
+          return 0;
+      } else
+        return 0;
+    } catch (PDOException $e) {
       return 0;
     }
   }
 
-  function getUser(){
-    $data = array('user_id' => $this->user_id,
-                  'username' => $this->username,
-                  'full_name' => $this->user_full_name,
-                  'phone_number' => $this->phone_number);
+  function getUser()
+  {
+    $data = array(
+      'user_id' => $this->user_id,
+      'username' => $this->username,
+      'full_name' => $this->user_full_name,
+      'phone_number' => $this->phone_number
+    );
     return $data;
   }
 

@@ -11,20 +11,22 @@ class Product
     $this->table_name = "Products";
   }
 
-  public function getAllProducts()
-  {
+  public function getAllProducts() {
     $query = "SELECT * FROM " . $this->table_name;
-    $stmt = $this->conn->query($query);
-    // $stmt->execute();
-    return $stmt;
-  }
-
-  public function getProductById($id)
-  {
-    $query = "SELECT * FROM " . $this->table_name . " WHERE products_id = ?";
     $stmt = $this->conn->prepare($query);
-    $stmt->bind_param("i", $id);
     $stmt->execute();
-    return $stmt->get_result()->fetch_assoc();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+  
+
+  public function getProductById($id) {
+    $query = "SELECT * FROM " . $this->table_name . " WHERE product_id = :id";
+    $stmt = $this->conn->prepare($query);
+    
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    
+    $stmt->execute();
+    
+    return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 }

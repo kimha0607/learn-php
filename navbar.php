@@ -2,6 +2,7 @@
   <ul>
     <li><a href="index.php">Home</a></li>
     <li><a href="product.php">Product</a></li>
+    <li><a href="cart.php">Cart</a></li>
     <li><a href="order.php">Order</a></li>
     <li><a href="logout.php">Logout</a></li>
   </ul>

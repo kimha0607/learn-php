@@ -48,6 +48,10 @@
   border: none;
   cursor: pointer;
   border-radius: 5px;
+  text-decoration: none;
+}
+.checkout-btn a {
+  text-decoration: none;
 }
 
 .checkout-btn:hover {

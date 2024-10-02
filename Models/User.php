@@ -6,9 +6,16 @@ class User
   private $conn;
 
   private $user_id;
-  private $user_full_name;
+  private $full_name;
   private $phone_number;
   private $username;
+
+  private $user_address;
+
+
+  private $email;
+
+
 
   function __construct($db_conn)
   {
@@ -26,8 +33,9 @@ class User
         $this->username = $user['username'];
         $this->user_id = $user['user_id'];
         $this->phone_number = $user['phone_number'];
-        $this->user_full_name = $user['full_name'];
+        $this->full_name = $user['full_name'];
         $this->user_address = $user['user_address'];
+        $this->email = $user['email'];
         return 1;
       } else
         return 0;
@@ -83,7 +91,7 @@ class User
             $this->username = $db_username;
             $this->user_id = $db_user_id;
             $this->phone_number = $db_phone_number;
-            $this->user_full_name = $db_full_name;
+            $this->full_name = $db_full_name;
             return 1;
           } else
             return 0;
@@ -101,8 +109,10 @@ class User
     $data = array(
       'user_id' => $this->user_id,
       'username' => $this->username,
-      'full_name' => $this->user_full_name,
-      'phone_number' => $this->phone_number
+      'full_name' => $this->full_name,
+      'phone_number' => $this->phone_number,
+      'user_address' => $this->user_address,
+      'email' => $this->email
     );
     return $data;
   }

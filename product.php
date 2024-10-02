@@ -16,21 +16,19 @@ if (!isset($_SESSION['csrf_token'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['product_id'])) {
-  $product_id = $_POST['product_id'];
-  print_r($product_id);
-  $product_data = $product->getProductById($product_id);
+    $product_id = $_POST['product_id'];
+    $product_data = $product->getProductById($product_id);
 
-  if ($product_data) {
-      if (isset($_SESSION['cart'][$product_id])) {
-          $_SESSION['cart'][$product_id]++;
-      } else {
-          $_SESSION['cart'][$product_id] = 1;
-      }
-  }
+    if ($product_data) {
+        if (isset($_SESSION['cart'][$product_id])) {
+            $_SESSION['cart'][$product_id]++;
+        } else {
+            $_SESSION['cart'][$product_id] = 1;
+        }
+    }
 }
 
 $products = $product->getAllProducts();
-print_r($products);
 ?>
 
 <!DOCTYPE html>
@@ -49,11 +47,12 @@ print_r($products);
     <div class="grid-container">
         <?php foreach ($products as $product) { ?>
             <div class="card">
-                <img src="Assets/images/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['product_name']); ?>">
+                <img src="Assets/images/<?php echo htmlspecialchars($product['image']); ?>"
+                    alt="<?php echo htmlspecialchars($product['product_name']); ?>">
                 <h3><?php echo htmlspecialchars($product['product_name']); ?></h3>
                 <p><?php echo htmlspecialchars($product['description']); ?></p>
                 <p class="price"><?php echo "$" . number_format($product['price'], 2); ?></p>
-                <p><?php echo htmlspecialchars($product['product_id']); ?></p>
+                <p><?php echo htmlspecialchars($product['stock']); ?></p>
 
                 <form method="POST" action="product.php">
                     <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">

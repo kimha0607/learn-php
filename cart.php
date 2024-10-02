@@ -2,8 +2,8 @@
 session_start();
 
 if (!isset($_SESSION['username']) || !isset($_SESSION['user_id'])) {
-    $em = "Please login first";
-    Util::redirect("login.php", "error", $em);
+  $em = "Please login first";
+  Util::redirect("login.php", "error", $em);
 }
 
 include "Models/Product.php";
@@ -14,12 +14,12 @@ $db_conn = $db->connect();
 $product = new Product($db_conn);
 
 if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
+  $_SESSION['cart'] = [];
 }
 
 if (isset($_GET['action']) && $_GET['action'] == 'remove' && isset($_GET['product_id'])) {
-    $product_id = $_GET['product_id'];
-    unset($_SESSION['cart'][$product_id]);
+  $product_id = $_GET['product_id'];
+  unset($_SESSION['cart'][$product_id]);
 }
 
 $total_amount = 0;
@@ -27,12 +27,14 @@ $total_amount = 0;
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Cart</title>
-    <link rel="stylesheet" type="text/css" href="Assets/css/cart.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart</title>
+  <link rel="stylesheet" type="text/css" href="Assets/css/cart.css">
 </head>
+
 <body>
   <?php include 'navbar.php'; ?>
   <div class="cart-container">
@@ -50,36 +52,37 @@ $total_amount = 0;
             <th>Action</th>
           </tr>
         </thead>
-          <tbody>
-            <?php foreach ($_SESSION['cart'] as $product_id => $quantity): ?>
-              <?php
-                $product_data = $product->getProductById($product_id);
-                if ($product_data) {
-                    $product_price = $product_data['price'];
-                    $total = $product_price * $quantity;
-                    $total_amount += $total;
-                ?>
-                  <tr>
-                      <td><?php echo htmlspecialchars($product_data['product_name']); ?></td>
-                      <td><?php echo "$" . number_format($product_price, 2); ?></td>
-                      <td><?php echo $quantity; ?></td>
-                      <td><?php echo "$" . number_format($total, 2); ?></td>
-                      <td>
-                        <a href="cart.php?action=remove&product_id=<?php echo $product_id; ?>" class="remove-btn">Remove</a>
-                      </td>
-                  </tr>
-                <?php
-                }
+        <tbody>
+          <?php foreach ($_SESSION['cart'] as $product_id => $quantity): ?>
+            <?php
+            $product_data = $product->getProductById($product_id);
+            if ($product_data) {
+              $product_price = $product_data['price'];
+              $total = $product_price * $quantity;
+              $total_amount += $total;
               ?>
-            <?php endforeach; 
+              <tr>
+                <td><?php echo htmlspecialchars($product_data['product_name']); ?></td>
+                <td><?php echo "$" . number_format($product_price, 2); ?></td>
+                <td><?php echo $quantity; ?></td>
+                <td><?php echo "$" . number_format($total, 2); ?></td>
+                <td>
+                  <a href="cart.php?action=remove&product_id=<?php echo $product_id; ?>" class="remove-btn">Remove</a>
+                </td>
+              </tr>
+              <?php
+            }
+            ?>
+          <?php endforeach;
           ?>
-          </tbody>
+        </tbody>
       </table>
-    <div class="cart-summary">
-      <h2>Total Amount: <?php echo "$" . number_format($total_amount, 2); ?></h2>
-      <button class="checkout-btn">Proceed to Checkout</button>
-    </div>
+      <div class="cart-summary">
+        <h2>Total Amount: <?php echo "$" . number_format($total_amount, 2); ?></h2>
+        <a href="order.php"><button class="checkout-btn">Proceed to Checkout</button></a>
+      </div>
     <?php endif; ?>
   </div>
 </body>
+
 </html>

@@ -8,7 +8,6 @@ class Order
     $this->conn = $db;
   }
 
-  // Tạo đơn hàng mới
   public function createOrder($user_id, $total_amount)
   {
     $query = "INSERT INTO Orders (user_id, total_amount) VALUES (:user_id, :total_amount)";

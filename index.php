@@ -1,13 +1,10 @@
 <?php
 session_start();
 include "Utils/Util.php";
-if (
-	isset($_SESSION['username']) &&
-	isset($_SESSION['user_id'])
-) {
+if (isset($_COOKIE['user_id'])) {
 
 	include "Controller/User.php";
-	$user->init($_SESSION['user_id']);
+	$user->init($_COOKIE['user_id']);
 	$user_data = $user->getUser();
 	?>
 	<!DOCTYPE html>

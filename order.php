@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['username']) || !isset($_SESSION['user_id'])) {
+if (!isset($_COOKIE['user_id'])) {
   $em = "Please login first";
   Util::redirect("login.php", "error", $em);
 }
@@ -17,10 +17,10 @@ $db_conn = $db->connect();
 $product = new Product($db_conn);
 $order = new Order($db_conn);
 $user = new User($db_conn);
-$user->init($_SESSION['user_id']);
+$user->init($_COOKIE[$cookie_name]);
 $user_data = $user->getUser();
 
-if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
+if (!isset($_SESSION['cart']) || empty($_COOKIE['cart'])) {
   $em = "Your cart is empty. Please add items to your cart before checking out.";
 }
 
@@ -34,7 +34,7 @@ foreach ($_SESSION['cart'] as $product_id => $quantity) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $user_id = $_SESSION['user_id'];
+  $user_id = $_COOKIE['user_id'];
 
   $order_id = $order->createOrder($user_id, $total_amount);
 

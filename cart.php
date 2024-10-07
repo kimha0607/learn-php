@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['username']) || !isset($_SESSION['user_id'])) {
+if (!isset($_COOKIE['user_id'])) {
   $em = "Please login first";
   Util::redirect("login.php", "error", $em);
 }
@@ -31,14 +31,14 @@ $total_amount = 0;
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Cart</title>
+  <title>Cart</title>
   <link rel="stylesheet" type="text/css" href="Assets/css/cart.css">
 </head>
 
 <body>
   <?php include 'navbar.php'; ?>
   <div class="cart-container">
-    <h1>Your Cart</h1>
+    <h1>Cart</h1>
     <?php if (empty($_SESSION['cart'])): ?>
       <p>Your cart is empty.</p>
     <?php else: ?>
